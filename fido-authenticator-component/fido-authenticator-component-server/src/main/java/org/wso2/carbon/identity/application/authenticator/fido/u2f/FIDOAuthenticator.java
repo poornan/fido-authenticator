@@ -29,6 +29,7 @@ import org.wso2.carbon.identity.application.authenticator.fido.u2f.data.DeviceRe
 import org.wso2.carbon.identity.application.authenticator.fido.u2f.data.messages.AuthenticateRequestData;
 import org.wso2.carbon.identity.application.authenticator.fido.u2f.data.messages.AuthenticateResponse;
 import org.wso2.carbon.identity.application.authenticator.fido.u2f.exceptions.U2fException;
+import org.wso2.carbon.identity.application.authenticator.fido.u2f.utils.FIDOAuthenticatorConstants;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -40,7 +41,6 @@ import java.util.*;
  */
 public class FIDOAuthenticator extends AbstractApplicationAuthenticator {
 
-	private static final String AUTHENTICATOR_NAME = "FIDOAuthenticator";
 	private final Map<String, String> requestStorage = new HashMap<String, String>();
 	private final Multimap<String, String> userStorage = ArrayListMultimap.create();
 	private final U2F u2f = new U2F();
@@ -164,11 +164,11 @@ public class FIDOAuthenticator extends AbstractApplicationAuthenticator {
 	}
 
 	@Override public String getName() {
-		return AUTHENTICATOR_NAME;
+		return FIDOAuthenticatorConstants.AUTHENTICATOR_NAME;
 	}
 
 	@Override public String getFriendlyName() {
-		return "FIDO";
+		return FIDOAuthenticatorConstants.AUTHENTICATOR_FRIENDLY_NAME;
 	}
 
 	@Override protected void initiateAuthenticationRequest(HttpServletRequest request,
