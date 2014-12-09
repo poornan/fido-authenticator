@@ -21,7 +21,7 @@ package org.wso2.carbon.identity.application.authenticator.fido.u2f.utils;
 /**
  * Utils class for SCIM Samples related operations.
  */
-public class SCIMUtils {
+public class FIDOUtils {
 
 	/*public static final String CONTENT_TYPE = "application/json";
 

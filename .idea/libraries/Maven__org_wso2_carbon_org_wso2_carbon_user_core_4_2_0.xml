@@ -8,6 +8,7 @@
     </JAVADOC>
     <SOURCES>
       <root url="jar://$MAVEN_REPOSITORY$/org/wso2/carbon/org.wso2.carbon.user.core/4.2.0/org.wso2.carbon.user.core-4.2.0-sources.jar!/" />
+      <root url="file://$USER_HOME$/kernel/4.2.0/core/org.wso2.carbon.user.core/4.2.0/src/main/java" />
     </SOURCES>
   </library>
 </component>

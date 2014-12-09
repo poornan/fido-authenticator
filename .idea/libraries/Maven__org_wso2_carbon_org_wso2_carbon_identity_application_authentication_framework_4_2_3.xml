@@ -8,6 +8,7 @@
     </JAVADOC>
     <SOURCES>
       <root url="jar://$MAVEN_REPOSITORY$/org/wso2/carbon/org.wso2.carbon.identity.application.authentication.framework/4.2.3/org.wso2.carbon.identity.application.authentication.framework-4.2.3-sources.jar!/" />
+      <root url="file://$USER_HOME$/Platform/turing-chunk13/components/identity/org.wso2.carbon.identity.application.authentication.framework/4.2.3/src/main/java" />
     </SOURCES>
   </library>
 </component>
