@@ -208,7 +208,7 @@ public class U2F {
     /**
      * Finishes a previously started authentication.
      *
-     * @param authenticateRequest
+     * @param authenticateRequest Authentication request data.
      * @param response            the response from the device/client.
      */
     public void finishAuthentication(AuthenticateRequest authenticateRequest,

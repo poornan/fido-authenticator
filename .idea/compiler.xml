@@ -26,6 +26,7 @@
         <processorPath useClasspath="true" />
         <module name="fido-authenticator-component-server" />
         <module name="fido-authenticator-component-server-ui" />
+        <module name="FIDOService" />
       </profile>
     </annotationProcessing>
   </component>

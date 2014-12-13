@@ -28,6 +28,7 @@
     <version>4.2.0</version>
     <modules>
         <module>fido-authenticator-component</module>
+        <module>FIDOService</module>
     </modules>
 
     <repositories>

@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/FIDOService/FIDOService.iml" filepath="$PROJECT_DIR$/FIDOService/FIDOService.iml" />
       <module fileurl="file://$PROJECT_DIR$/fido-authenticator.iml" filepath="$PROJECT_DIR$/fido-authenticator.iml" />
       <module fileurl="file://$PROJECT_DIR$/fido-authenticator-component/fido-authenticator-component.iml" filepath="$PROJECT_DIR$/fido-authenticator-component/fido-authenticator-component.iml" />
       <module fileurl="file://$PROJECT_DIR$/fido-authenticator-component/fido-authenticator-component-server/fido-authenticator-component-server.iml" filepath="$PROJECT_DIR$/fido-authenticator-component/fido-authenticator-component-server/fido-authenticator-component-server.iml" />

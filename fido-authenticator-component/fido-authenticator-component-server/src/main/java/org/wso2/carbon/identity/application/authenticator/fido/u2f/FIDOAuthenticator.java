@@ -18,6 +18,10 @@
 
 package org.wso2.carbon.identity.application.authenticator.fido.u2f;
 
+import org.apache.axis2.context.ConfigurationContext;
+import org.apache.axis2.context.ConfigurationContextFactory;
+import org.apache.axis2.transport.http.HTTPConstants;
+import org.wso2.carbon.authenticator.proxy.AuthenticationAdminStub;
 import org.wso2.carbon.identity.application.authentication.framework.AbstractApplicationAuthenticator;
 import org.wso2.carbon.identity.application.authentication.framework.config.ConfigurationFacade;
 import org.wso2.carbon.identity.application.authentication.framework.context.AuthenticationContext;
@@ -28,6 +32,9 @@ import org.wso2.carbon.identity.application.authenticator.fido.u2f.data.messages
 import org.wso2.carbon.identity.application.authenticator.fido.u2f.data.messages.AuthenticateResponse;
 import org.wso2.carbon.identity.application.authenticator.fido.u2f.exceptions.U2fException;
 import org.wso2.carbon.identity.application.authenticator.fido.u2f.utils.FIDOAuthenticatorConstants;
+import org.wso2.carbon.um.ws.api.WSRealmBuilder;
+import org.wso2.carbon.user.core.UserRealm;
+import org.wso2.carbon.user.core.UserStoreManager;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -58,7 +65,7 @@ public class FIDOAuthenticator extends AbstractApplicationAuthenticator {
 	private Iterable<DeviceRegistration> getRegistrations(String username, String appID) {
 		List<DeviceRegistration> registrations = new ArrayList<DeviceRegistration>();
 		registrations.add(
-				DeviceRegistration.fromJson(U2FUser.getDeviceRegistration(username, appID)));
+				DeviceRegistration.fromJson(getDeviceRegistration(username, appID)));
 		return registrations;
 	}
 
@@ -158,6 +165,47 @@ public class FIDOAuthenticator extends AbstractApplicationAuthenticator {
 
 	@Override protected boolean retryAuthenticationEnabled() {
 		return false;
+	}
+
+	public static String getDeviceRegistration(String username, String appID) {
+		String deviceRegistration = "";
+		final String SERVER_URL = "https://localhost:9443/services/";
+		AuthenticationAdminStub authstub;
+		ConfigurationContext configContext;
+		String cookie;
+
+		System.setProperty("javax.net.ssl.trustStore", "wso2carbon.jks");
+		System.setProperty("javax.net.ssl.trustStorePassword", "wso2carbon");
+
+		try {
+			configContext = ConfigurationContextFactory.createConfigurationContextFromFileSystem(
+					"repo", "repo/conf/client.axis2.xml");
+			authstub = new AuthenticationAdminStub(configContext, SERVER_URL
+			                                                      + "AuthenticationAdmin");
+
+			// Authenticates as a user having rights to add users.
+			if (authstub.login("admin", "admin", appID)) {
+				cookie = (String) authstub._getServiceClient().getServiceContext().getProperty(
+						HTTPConstants.COOKIE_STRING);
+
+				UserRealm realm = WSRealmBuilder.createWSRealm(SERVER_URL, cookie, configContext);
+				UserStoreManager storeManager = realm.getUserStoreManager();
+
+				if (storeManager.isExistingUser(username)) {
+					deviceRegistration = storeManager
+							.getUserClaimValue(username, "http://wso2.org/claims/registration",
+							                   null);
+				} else {
+					System.out.println("The user you are trying is not in the system");
+				}
+
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return deviceRegistration;
 	}
 
 }

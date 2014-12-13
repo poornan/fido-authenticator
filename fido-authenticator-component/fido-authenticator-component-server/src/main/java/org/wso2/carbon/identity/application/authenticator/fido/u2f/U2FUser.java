@@ -24,13 +24,9 @@ import org.apache.axis2.transport.http.HTTPConstants;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.wso2.carbon.authenticator.proxy.AuthenticationAdminStub;
-import org.wso2.carbon.identity.application.authenticator.fido.u2f.exceptions.U2fException;
 import org.wso2.carbon.um.ws.api.WSRealmBuilder;
 import org.wso2.carbon.user.core.UserRealm;
 import org.wso2.carbon.user.core.UserStoreManager;
-
-import java.util.HashMap;
-import java.util.Map;
 
 public class U2FUser {
 
@@ -42,7 +38,7 @@ public class U2FUser {
 	 * @param appID
 	 * @return
 	 */
-	public static String createUser(String username, String registration, String appID) {
+	/*public static String createUser(String username, String registration, String appID) {
 
 		String status = "";
 		final String SERVER_URL = "https://localhost:9443/services/";
@@ -95,7 +91,7 @@ public class U2FUser {
 			log.error("Could not add user to user store");
 		}
 		return status;
-	}
+	}*/
 
 	public static String getDeviceRegistration(String username, String appID) {
 		String deviceRegistration = "";
