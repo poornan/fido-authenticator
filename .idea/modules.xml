@@ -2,11 +2,13 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/FIDO Stub/FIDO Stub.iml" filepath="$PROJECT_DIR$/FIDO Stub/FIDO Stub.iml" />
       <module fileurl="file://$PROJECT_DIR$/FIDOService/FIDOService.iml" filepath="$PROJECT_DIR$/FIDOService/FIDOService.iml" />
-      <module fileurl="file://$PROJECT_DIR$/fido-authenticator.iml" filepath="$PROJECT_DIR$/fido-authenticator.iml" />
       <module fileurl="file://$PROJECT_DIR$/fido-authenticator-component/fido-authenticator-component.iml" filepath="$PROJECT_DIR$/fido-authenticator-component/fido-authenticator-component.iml" />
       <module fileurl="file://$PROJECT_DIR$/fido-authenticator-component/fido-authenticator-component-server/fido-authenticator-component-server.iml" filepath="$PROJECT_DIR$/fido-authenticator-component/fido-authenticator-component-server/fido-authenticator-component-server.iml" />
       <module fileurl="file://$PROJECT_DIR$/fido-authenticator-component/fido-authenticator-component-server-ui/fido-authenticator-component-server-ui.iml" filepath="$PROJECT_DIR$/fido-authenticator-component/fido-authenticator-component-server-ui/fido-authenticator-component-server-ui.iml" />
+      <module fileurl="file://$PROJECT_DIR$/fido-component.iml" filepath="$PROJECT_DIR$/fido-component.iml" />
+      <module fileurl="file://$PROJECT_DIR$/org.wso2.carbon.identity.fido.u2f.ui/org.wso2.carbon.identity.fido.u2f.ui.iml" filepath="$PROJECT_DIR$/org.wso2.carbon.identity.fido.u2f.ui/org.wso2.carbon.identity.fido.u2f.ui.iml" />
     </modules>
   </component>
 </project>

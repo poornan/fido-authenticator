@@ -27,36 +27,32 @@ import com.yubico.u2f.data.messages.AuthenticateResponse;
 import com.yubico.u2f.data.messages.RegisterRequestData;
 import com.yubico.u2f.data.messages.RegisterResponse;
 import com.yubico.u2f.exceptions.U2fException;
-import org.apache.axis2.context.ConfigurationContext;
-import org.apache.axis2.context.ConfigurationContextFactory;
-import org.apache.axis2.transport.http.HTTPConstants;
-import org.wso2.carbon.authenticator.proxy.AuthenticationAdminStub;
-import org.wso2.carbon.um.ws.api.WSRealmBuilder;
-import org.wso2.carbon.user.core.UserRealm;
-import org.wso2.carbon.user.core.UserStoreManager;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created by ananthaneshan on 12/11/14.
  */
 public class FIDOService {
-	private final Map<String, String> requestStorage = new HashMap<String, String>();
-	private final Multimap<String, String> userStorage = ArrayListMultimap.create();
+	private static final Map<String, String> requestStorage = new HashMap<String, String>();
+	private static final Multimap<String, String> userStorage = ArrayListMultimap.create();
 	private final U2F u2f = new U2F();
 
 	private Iterable<DeviceRegistration> getRegistrations(String username, String appID) {
-		List<DeviceRegistration> registrations = new ArrayList<DeviceRegistration>();
+		/*List<DeviceRegistration> registrations = new ArrayList<DeviceRegistration>();
 		registrations.add(
 				DeviceRegistration.fromJson(getDeviceRegistration(username, appID)));
+		return registrations;*/
+		Collection<String> serializedRegistrations = userStorage.get(username);
+		List<DeviceRegistration> registrations = new ArrayList<DeviceRegistration>();
+		for(String serialized : serializedRegistrations) {
+			registrations.add(DeviceRegistration.fromJson(serialized));
+		}
 		return registrations;
 	}
 
 	public static String getDeviceRegistration(String username, String appID) {
-		String deviceRegistration = "";
+		/*String deviceRegistration = "";
 		final String SERVER_URL = "https://localhost:9443/services/";
 		AuthenticationAdminStub authstub;
 		ConfigurationContext configContext;
@@ -91,9 +87,9 @@ public class FIDOService {
 
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
+		}*/
 
-		return deviceRegistration;
+		return "";//deviceRegistration;
 	}
 
 	/**
@@ -104,11 +100,19 @@ public class FIDOService {
 	 * @return AuthenticateRequestData.
 	 * @throws U2fException
 	 */
-	public String startAuthentication(String username, String appID) throws U2fException {
+	public String startAuthentication(String username, String appID){
 		AuthenticateRequestData authenticateRequestData =
-				u2f.startAuthentication(appID, getRegistrations(username, appID));
+				null;
+
+		try {
+			authenticateRequestData =
+					u2f.startAuthentication(appID, getRegistrations(username, appID));
+		} catch (U2fException e) {
+			e.printStackTrace();
+		}
 		requestStorage
 				.put(authenticateRequestData.getRequestId(), authenticateRequestData.toJson());
+
 		return authenticateRequestData.toJson();
 	}
 
@@ -120,13 +124,20 @@ public class FIDOService {
 	 * @throws U2fException
 	 */
 	public void finishAuthentication(String response,
-	                                  String username, String appID) throws U2fException {
+	                                  String username, String appID) {
 		AuthenticateResponse authenticateResponse = AuthenticateResponse.fromJson(response);
-		AuthenticateRequestData authenticateRequest = AuthenticateRequestData
-				.fromJson(requestStorage.get(authenticateResponse.getRequestId()));
-		requestStorage.remove(authenticateResponse.getRequestId());
-		u2f.finishAuthentication(authenticateRequest, authenticateResponse,
-		                         getRegistrations(username, appID));
+
+		AuthenticateRequestData authenticateRequest = null;
+		try {
+			authenticateRequest = AuthenticateRequestData
+					.fromJson(requestStorage.get(authenticateResponse.getRequestId()));
+			requestStorage.remove(authenticateResponse.getRequestId());
+			u2f.finishAuthentication(authenticateRequest, authenticateResponse,
+			                         getRegistrations(username, appID));
+		} catch (U2fException e) {
+			e.printStackTrace();
+		}
+
 	}
 
 	/**
@@ -136,10 +147,19 @@ public class FIDOService {
 	 * @return String RegisterRequestData.
 	 */
 	public String startRegistration(String username, String appID) {
-		RegisterRequestData registerRequestData =
-				u2f.startRegistration(appID, getRegistrations(username, appID));
-		requestStorage.put(registerRequestData.getRequestId(), registerRequestData.toJson());
-		return registerRequestData.toJson();
+		System.out.println("inside start registration in service component");
+		try{
+			RegisterRequestData registerRequestData =
+					u2f.startRegistration(appID, getRegistrations(username, appID));
+			requestStorage.put(registerRequestData.getRequestId(), registerRequestData.toJson());
+			System.out.println("done service component");
+			return registerRequestData.toJson();
+
+		}
+		catch (Exception e){
+			e.printStackTrace();
+		}
+		return "";
 	}
 
 	/**
@@ -149,18 +169,24 @@ public class FIDOService {
 	 * @return success or failure.
 	 * @throws U2fException
 	 */
-	public String finishRegistration(String response, String username, String appID)
-			throws U2fException {
-		RegisterResponse registerResponse = RegisterResponse.fromJson(response);
-		RegisterRequestData registerRequestData =
-				RegisterRequestData.fromJson(requestStorage.get(registerResponse.getRequestId()));
-		DeviceRegistration registration =
-				u2f.finishRegistration(registerRequestData, registerResponse);
-		addRegistration(username, registration, appID);
+	public String finishRegistration(String response, String username, String appID)  {
+		try {
+			System.out.println("inside finish registration in service component");
+			RegisterResponse registerResponse = RegisterResponse.fromJson(response);
+			RegisterRequestData registerRequestData =
+					RegisterRequestData.fromJson(requestStorage.get(registerResponse.getRequestId()));
+			DeviceRegistration registration =
+					u2f.finishRegistration(registerRequestData, registerResponse);
+			addRegistration(username, registration, appID);
 
-		requestStorage.remove(registerResponse.getRequestId());
+			requestStorage.remove(registerResponse.getRequestId());
 
-		return "SUCCESS";
+			return "SUCCESS";
+
+		}catch(U2fException e){
+			e.printStackTrace();
+		}
+		return ":failed";
 	}
 
 	private void addRegistration(String username, DeviceRegistration registration) {

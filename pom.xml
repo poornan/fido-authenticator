@@ -29,6 +29,8 @@
     <modules>
         <module>fido-authenticator-component</module>
         <module>FIDOService</module>
+        <module>FIDO Stub</module>
+        <module>org.wso2.carbon.identity.fido.u2f.ui</module>
     </modules>
 
     <repositories>

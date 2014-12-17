@@ -24,9 +24,11 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
+        <module name="FIDO Stub" />
         <module name="fido-authenticator-component-server" />
         <module name="fido-authenticator-component-server-ui" />
         <module name="FIDOService" />
+        <module name="org.wso2.carbon.identity.fido.u2f.ui" />
       </profile>
     </annotationProcessing>
   </component>
